@@ -10,8 +10,8 @@ module.exports = class ContainerAbstract {
      * @param {String} id - identifier of class 
      * @param {class} classRegister - class to register
      */
-    register(id, classRegister) {
-        this._container.register(id, classRegister)
+    register(id, classRegister, container) {
+        this._container.register(id, classRegister).addArgument(container)
     }
 
     /**

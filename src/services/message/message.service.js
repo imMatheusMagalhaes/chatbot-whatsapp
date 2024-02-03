@@ -7,18 +7,21 @@ const ActionTypes = {
 }
 
 module.exports = class MessageService extends MessageAbstract {
-    constructor() {
+    constructor(container) {
         super()
         this.initialize()
         this.mainUser = `${process.env.MAIN_USER}@c.us`
         this.action = ActionTypes.LISTEN
+        this._container = container
     }
     mainUser
     action
     logMessageSended() {
+        const register = this._container.getService('register.service')
         this.listenSended(async (message) => {
             if (this.action === ActionTypes.SAVE) {
-                console.log('salvei');
+                await register.createRegister(message.body)
+                await this.sendMessage(this.mainUser, 'salvei')
                 this.action = ActionTypes.LISTEN
                 return
             }
@@ -29,7 +32,7 @@ module.exports = class MessageService extends MessageAbstract {
                         break;
 
                     default:
-                        console.log("não entendi");
+                        console.log("não identifiquei");
                         break;
                 }
         })
